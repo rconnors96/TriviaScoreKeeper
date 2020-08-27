@@ -6,7 +6,7 @@ from sqlite3 import Error
 databaseName = 'TeamsDB.sqlite3'
 
 
-def inital_setup_teams_table():
+def initial_setup_teams_table():
     conn = create_connection()
 
     sql_statement_drop_table = """ DROP TABLE teams;"""
@@ -35,7 +35,7 @@ def create_connection():
 
 def execute_sql(conn, sql_line):
     try:
-        c  = conn.cursor()
+        c = conn.cursor()
         c.execute(sql_line)
     except Error as e:
         print(e)
@@ -50,8 +50,8 @@ def invalid_team_name_warning():
                         "Team name must be greater than 1 character")
 
 
-#returns True for a valid team name
-#returns False for invalid team name
+# returns True for a valid team name
+# returns False for invalid team name
 def validate_team_name(teamName):
     if len(teamName) <= 1:
         invalid_team_name_warning()
@@ -85,7 +85,8 @@ def continue_game(window):
 
 def new_game(window):
     window.destroy()
-    inital_setup_teams_table()
+    initial_setup_teams_table()
+    main_app_window()
 
 def start():
     new_game_window = tk.Tk()
@@ -107,13 +108,20 @@ def start():
 
     new_game_window.mainloop()
 
+
 def main_app_window():
     main_window = tk.Tk()
     main_window.title('Trivia Score Keeper')
     main_window.minsize(1280, 720)
     main_window.maxsize(1920, 1080)
-    add_team_button = tk.Button(main_window, text='Add a Team', width=25, command=lambda: start_add_team_window)
-    add_team_button.place(x=0, y=0)
+
+    menu_bar = tk.Menu(main_window)
+    main_window.config(menu=menu_bar)
+
+    file_menu = tk.Menu(menu_bar, tearoff=False)
+    file_menu.add_command(label="Add a Team", command=lambda: start_add_team_window())
+    menu_bar.add_cascade(label="File", menu=file_menu)
+
     main_window.mainloop()
 
 
